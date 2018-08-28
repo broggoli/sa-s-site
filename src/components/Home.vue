@@ -1,11 +1,8 @@
 <template>
   <div class="">
     <h2>{{ msg }}</h2>
-    <!--<pre> {{ page }}</pre>-->
+    <pre> {{ page }}</pre>
     {{ content }}
-    <button v-on:click.prevent="getPage">
-      Fetch Data
-    </button>
     
   </div>
 </template>
@@ -18,10 +15,10 @@ export default {
   name: 'Home',
   data() {
     return {
+      name: 'Home',
       msg: "TestMsg",
       page: "nothing loaded yet",
-      content: "",
-      name: 'Home'
+      content: "loading..."
     }
   },
   methods: {
