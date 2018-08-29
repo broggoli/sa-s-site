@@ -1,15 +1,23 @@
 <template>
-  <div class="">
-    <h1>{{ msg }}</h1>
-    Header
-  </div>
+   <header>
+        <a href="/">
+            <img class="sa-s_logo" :src="logo" />
+        </a>
+        <img class="burger-menu" :src="burgerMenuImg" />
+    </header>
 </template>
 
 <script>
+import burgerMenuImg from "../assets/svg/burger-menu.svg"
+import logo from "../assets/svg/sa-s_logo.svg"
+
 export default {
   name: 'Header',
-  props: {
-    msg: String
+  data: function () {
+    return {
+      burgerMenuImg,
+      logo
+    }
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div class="">
     <h2>{{ msg }}</h2>
     <pre> {{ page }}</pre>
-    {{ content }}
+    <div v-html="content"></div>
     
   </div>
 </template>
@@ -10,10 +10,10 @@
 <script>
 export default {
   created() {
-    return this.getPage()
+    this.getPage()
   },
   name: 'Home',
-  data() {
+  data: function() {
     return {
       name: 'Home',
       msg: "TestMsg",
@@ -26,14 +26,16 @@ export default {
       this.$http.get('http://wp.sa-s.ch/wp-json/wp/v2/pages?slug='+this.name)
       .then( response => {
         // get body data
-        this.page = response.body[0];
+        this.page = response.data[0];
         if( this.page.status == "publish") {
           this.content = this.page.content.rendered
         }else{
           this.content = "Nothing to see here!"
         }
-
       })
+      .catch(e => {
+        this.errors.push(e)
+    })
     }
   }
 }
