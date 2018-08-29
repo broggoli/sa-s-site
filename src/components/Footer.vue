@@ -1,15 +1,14 @@
 <template>
-  <div class="">
-    <h1>{{ msg }}</h1>
-    Footer
-  </div>
+  <footer>
+    <!--<span>{{ data.copyright }}</span>-->
+  </footer>
 </template>
 
 <script>
 export default {
   name: 'Footer',
   props: {
-    msg: String
+    data: Object
   }
 }
 </script>

@@ -13,7 +13,7 @@
     <loader-component 
       v-bind:currentRoute='currentRoute'>
     </loader-component>
-    <footer-component></footer-component>
+    <footer-component v-bind:data="footerData"></footer-component>
   </div>
 </template>
 
@@ -34,11 +34,14 @@ export default {
   data: function() {
     return {
       menuIsOpen: false,
-      currentRoute: this.getCurrentPage()
+      currentRoute: this.getCurrentPage(),
+      footerData: {
+        copyright: "copyright Nick Bachmann 2018"
+      }
     }
   }, 
   watch: {
-    '$route' (to, from) {
+    '$route' () {
       this.currentRoute = this.getCurrentPage()
     }
   },

@@ -6,26 +6,52 @@
     
     <div class="menu">
       <ul>
-        <router-link v-for="(page, index) in pages" 
-          tag="li" 
-          :to="page.route" 
+        <li v-for="(page, index) in pages"
           v-bind:key="index">
-          <div class="menu-item"
-              v-on:click="$emit('toggle-menu')"
-              v-bind:class="{ active: currentRoute === page.route }">
+           <router-link tag="div" 
+              :to="page.route" 
+              class="menu-item"
+              v-bind:class="{ active: pageIsActive(page.route) }">
             <div class="current-page-indicator"></div>
             <div class="item-text">
-              <span>{{ page.title }}</span>
+              <span v-on:click="$emit('toggle-menu')">{{ page.title }}</span> 
+              <img v-if="page.children.length > 0" 
+                    class="show-more" 
+                    :src="arrow"
+                    v-bind:class="{ down: page.showChildren }"
+                    v-on:click="page.showChildren = !page.showChildren"/>
             </div>
-          </div>
-        </router-link >
+           </router-link>
+
+          <router-link tag="div"
+              v-if="page.showChildren"
+              v-for="(subPage, index) in page.children"
+              :to="subPage.route" 
+              class="menu-item sub-item"            
+              v-bind:key="index"
+              v-bind:class="{ active: currentRoute === subPage.route }">
+            <div class="current-page-indicator"></div>
+            <div class="item-text">
+              <span v-on:click="$emit('toggle-menu')">{{ subPage.title }}</span>
+            </div>
+
+          </router-link>
+        </li>
       </ul>
     </div>
+    <div class="acknowledgement">
+      <div id="madeBy">
+        <p>
+          <a href="www.broggoli.ch">Web design by Nick Bachmann</a>
+        </p>
+      </div>
+    </div>  
   </nav>
 </template>
 
 <script>
 import closeMenuImg from "../assets/svg/close-menu.svg"
+import arrow from "../assets/svg/arrow.svg"
 export default {
   created() {
     this.getPageTitles()
@@ -34,6 +60,7 @@ export default {
   props: ['isOpen', 'currentRoute'],
   data: () => ({
     closeMenuImg,
+    arrow,
 
     pages: [],
     errors: []
@@ -42,12 +69,50 @@ export default {
     getPageTitles: function() {
       this.$http.get('http://wp.sa-s.ch/wp-json/wp/v2/pages')
       .then( response => {
-        const pages = response.data;
+        const pages = response.data
+        let mainPages = []
+        let subPages = []
         
         for( const page of pages ) {
-          //menu_order
-          this.pages.push({ title: page.title.rendered, route: page.slug})
+          if( page.parent === 0) {
+            // This page is a main page
+            mainPages.push(
+              {
+                id: page.id,
+                title: page.title.rendered, 
+                route: page.slug, 
+                order: page.menu_order,
+                showChildren: false,
+                children: []
+              })
+          }else if( page.parent > 0){
+            // This page is a sub page
+            subPages.push(
+              {
+                id: page.id,
+                title: page.title.rendered, 
+                route: page.slug, 
+                order: page.menu_order,
+                parent: page.parent
+              })
+          }
+          
         }
+        const sortByOrder = (a, b) => {
+          if(a.order < b.order) return -1;
+          if(a.order > b.order) return 1;
+        }
+        // sort both
+        mainPages.sort( sortByOrder )
+        subPages.sort( sortByOrder )
+        for(const subPage of subPages) {
+          const parent = mainPages.filter( a => a.id === subPage.parent)[0]
+          const index = mainPages.indexOf(parent)
+          if( index > -1) {
+            mainPages[index].children.push(subPage)
+          }
+        }
+        this.pages = mainPages
       })
       .catch(e => {
         if( e.msg ) {
@@ -55,11 +120,8 @@ export default {
         }
       })
     },
-    getCurrentPage: function() {
-      const routeArray = this.$router.currentRoute.path.split("/");
-      const pageName = routeArray[ routeArray.length - 1 ]
-      console.log(pageName)
-      return pageName 
+    pageIsActive( route ) {
+        return this.currentRoute.toLowerCase() === route
     }
   },
 }

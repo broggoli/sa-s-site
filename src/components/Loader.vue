@@ -25,13 +25,12 @@ export default {
     }
   },
   watch: { 
-      currentRoute: function(to, from) {
+      currentRoute: function(to) {
         this.getPage(to)
       }
   },
   methods: {
     getPage: function(pageName) {
-      console.log(pageName)
       this.$http.get('http://wp.sa-s.ch/wp-json/wp/v2/pages?slug='+pageName)
       .then( response => {
         // get body data
