@@ -3,7 +3,7 @@
         <a href="/">
             <img class="sa-s_logo" :src="logo" />
         </a>
-        <img class="burger-menu" :src="burgerMenuImg" />
+        <img v-on:click="$emit('toggle-menu')" class="burger-menu" :src="burgerMenuImg" />
     </header>
 </template>
 

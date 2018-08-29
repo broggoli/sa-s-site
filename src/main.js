@@ -2,10 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import Router from 'vue-router'
 import axios from 'axios'
-import Home from './components/Home'
-import Axios from 'axios'
+import Loader from './components/Loader'
 
-Vue.prototype.$http = Axios;
+Vue.prototype.$http = axios;
 Vue.use(Router, axios)
 
 Vue.config.productionTip = false
@@ -13,8 +12,8 @@ Vue.config.productionTip = false
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Loader',
+    component: Loader
   }
 ]
 const router =  new Router( { 

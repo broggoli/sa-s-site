@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <header-component></header-component>
-    <nav-component></nav-component>
-
+    <header-component v-on:toggle-menu="menuIsOpen = !menuIsOpen;"></header-component>
+    <nav-component v-on:toggle-menu="menuIsOpen = !menuIsOpen" v-bind:isOpen='menuIsOpen'></nav-component>
+    
     <router-view></router-view>
     <footer-component></footer-component>
   </div>
 </template>
 
 <script>
-import HomeComponent from './components/Home.vue'
+import LoaderComponent from './components/Loader.vue'
 import HeaderComponent from './components/Header.vue'
 import NavComponent from './components/Nav.vue'
 import FooterComponent from './components/Footer.vue'
@@ -20,8 +20,13 @@ export default {
     HeaderComponent,
     FooterComponent,
     NavComponent,
-    HomeComponent
-  }
+    LoaderComponent
+  },
+  data: function() {
+    return {
+      menuIsOpen: false
+    }
+  },
 }
 </script>
 

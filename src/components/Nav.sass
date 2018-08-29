@@ -1,0 +1,51 @@
+@import './colors'
+
+$nav-width: 20em
+nav.open
+  right: 0
+nav
+  //backdrop-filter: blur(5px)
+  display: flex
+  flex-direction: column
+  position: fixed
+  top: 0
+  right: -$nav-width
+  height: 100%
+  width: $nav-width
+  background: $bg-color
+
+  .nav-header
+    display: flex
+    justify-content: flex-end
+    height: 4em
+    .close-menu:hover
+      transform: scale(1.1)
+  .menu
+    flex: 1
+    background: $white
+    ul
+      list-style-type: none
+      margin: 0
+      padding: 0
+
+      li
+        .menu-item:hover .item-text
+          background: darken($white, 10%)
+        .menu-item
+          display: flex
+          flex-direction: row
+          height: 3em
+        .current-page-indicator
+          width: 5px
+          background-color: $not-active-menu-color
+          mix-blend-mode: normal
+          opacity: 0.96
+        .current-page-indicator.active
+          background-color: $active-menu-color
+        .item-text
+          display: flex
+          align-items: center
+          flex: 1
+          
+          span
+            margin-left: 1em
