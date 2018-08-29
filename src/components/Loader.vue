@@ -11,9 +11,10 @@ import PageComponent from './Page.vue'
 import AlertComponent from './Alert.vue'
 export default {
   created() {
-    this.getPage(this.name)
+    this.getPage(this.currentRoute)
   },
-  name: 'Home',
+  name: 'Loader',
+  props: ['currentRoute'],
   data: function() {
     return {
       name: 'Home',
@@ -23,8 +24,14 @@ export default {
       page: {content: "no page loaded Yet", title: "No title"}
     }
   },
+  watch: { 
+      currentRoute: function(to, from) {
+        this.getPage(to)
+      }
+  },
   methods: {
     getPage: function(pageName) {
+      console.log(pageName)
       this.$http.get('http://wp.sa-s.ch/wp-json/wp/v2/pages?slug='+pageName)
       .then( response => {
         // get body data
@@ -39,7 +46,7 @@ export default {
         if( e.msg ) {
           this.errors.push(e)
         }
-    })
+      })
     }
   },
   components: {

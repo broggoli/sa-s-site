@@ -1,20 +1,24 @@
 <template>
-  <nav class="nav" v-bind:class="{ open: isOpen }">
+  <nav class="nav backdrop-blur" v-bind:class="{ open: isOpen }">
     <div class="nav-header">
       <img class="close-menu" :src="closeMenuImg" v-on:click="$emit('toggle-menu')"  />
     </div>
     
     <div class="menu">
       <ul>
-        <li v-for="(title, index) in pageTitles" 
-            v-bind:key="index">
-          <div class="menu-item">
+        <router-link v-for="(page, index) in pages" 
+          tag="li" 
+          :to="page.route" 
+          v-bind:key="index">
+          <div class="menu-item"
+              v-on:click="$emit('toggle-menu')"
+              v-bind:class="{ active: currentRoute === page.route }">
             <div class="current-page-indicator"></div>
             <div class="item-text">
-              <span>{{ title }}</span>
+              <span>{{ page.title }}</span>
             </div>
           </div>
-        </li>
+        </router-link >
       </ul>
     </div>
   </nav>
@@ -24,15 +28,14 @@
 import closeMenuImg from "../assets/svg/close-menu.svg"
 export default {
   created() {
-    this.getPageTitles(),
-    this.isOpen = false
+    this.getPageTitles()
   },
   name: 'Nav',
-  props: ['isOpen'],
+  props: ['isOpen', 'currentRoute'],
   data: () => ({
     closeMenuImg,
 
-    pageTitles: [],
+    pages: [],
     errors: []
   }), 
   methods: {
@@ -43,14 +46,20 @@ export default {
         
         for( const page of pages ) {
           //menu_order
-          this.pageTitles.push(page.title.rendered)
+          this.pages.push({ title: page.title.rendered, route: page.slug})
         }
       })
       .catch(e => {
         if( e.msg ) {
           this.errors.push(e)
         }
-    })
+      })
+    },
+    getCurrentPage: function() {
+      const routeArray = this.$router.currentRoute.path.split("/");
+      const pageName = routeArray[ routeArray.length - 1 ]
+      console.log(pageName)
+      return pageName 
     }
   },
 }

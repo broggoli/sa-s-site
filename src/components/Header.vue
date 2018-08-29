@@ -3,7 +3,10 @@
         <a href="/">
             <img class="sa-s_logo" :src="logo" />
         </a>
-        <img v-on:click="$emit('toggle-menu')" class="burger-menu" :src="burgerMenuImg" />
+        <img v-on:click="$emit('toggle-menu')"
+          v-bind:class="{isOpen: menuIsOpen}"
+          class="burger-menu"
+          :src="burgerMenuImg" />
     </header>
 </template>
 
@@ -13,6 +16,7 @@ import logo from "../assets/svg/sa-s_logo.svg"
 
 export default {
   name: 'Header',
+  props: ["menuIsOpen"],
   data: function () {
     return {
       burgerMenuImg,

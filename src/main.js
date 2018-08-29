@@ -12,8 +12,7 @@ Vue.config.productionTip = false
 const routes = [
   {
     path: '/',
-    name: 'Loader',
-    component: Loader
+    name: 'Home'
   }
 ]
 const router =  new Router( { 

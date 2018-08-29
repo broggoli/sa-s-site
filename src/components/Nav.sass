@@ -1,8 +1,9 @@
-@import './colors'
+@import '../sass/_colors'
+@import '../sass/_backdrop'
 
-$nav-width: 20em
+$nav-width: 22em
 nav.open
-  right: 0
+  right: -2em
 nav
   //backdrop-filter: blur(5px)
   display: flex
@@ -13,16 +14,17 @@ nav
   height: 100%
   width: $nav-width
   background: $bg-color
+  transition: 500ms cubic-bezier(0.19,-0.45, 0.3, 0.96)
 
   .nav-header
     display: flex
     justify-content: flex-end
     height: 4em
+    padding-right: 2em
     .close-menu:hover
       transform: scale(1.1)
   .menu
     flex: 1
-    background: $white
     ul
       list-style-type: none
       margin: 0
@@ -30,18 +32,33 @@ nav
 
       li
         .menu-item:hover .item-text
-          background: darken($white, 10%)
+          //background-color: darken($white, 10%)
+          // box-shadow: black 5px 2px 4px 0px
+          // transform: translateY(-2px)
+        .menu-item:hover .item-text>span::after
+          width: 100%
         .menu-item
+          cursor: pointer
           display: flex
           flex-direction: row
           height: 3em
+          margin-top: 0.1em
         .current-page-indicator
-          width: 5px
+          width: 4px
           background-color: $not-active-menu-color
           mix-blend-mode: normal
           opacity: 0.96
-        .current-page-indicator.active
+          transition: 500ms ease
+        .menu-item.active .current-page-indicator
           background-color: $active-menu-color
+
+        .item-text>span::after
+          content: ""
+          background-color: $text-color
+          display: block
+          height: 2px
+          width: 0
+          transition: 200ms ease
         .item-text
           display: flex
           align-items: center
