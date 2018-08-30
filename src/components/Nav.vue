@@ -6,33 +6,34 @@
     
     <div class="menu">
       <ul>
-        <li v-for="(page, index) in pages"
-          v-bind:key="index">
-           <router-link tag="div" 
-              :to="page.route" 
-              class="menu-item"
+        <li v-for="(page, index) in pages" v-bind:key="index">
+          <router-link tag="div" 
+              :to="{ path: '/'+page.route}" 
+              class="menu-item" 
               v-bind:class="{ active: pageIsActive(page.route) }">
+
             <div class="current-page-indicator"></div>
-            <div class="item-text">
-              <span v-on:click="$emit('toggle-menu')">{{ page.title }}</span> 
-              <img v-if="page.children.length > 0" 
-                    class="show-more" 
-                    :src="arrow"
-                    v-bind:class="{ down: page.showChildren }"
-                    v-on:click="page.showChildren = !page.showChildren"/>
+            
+            <div class="item-text"  v-on:click="$emit('toggle-menu')">
+              <span>{{ page.title }}</span> 
             </div>
-           </router-link>
+          <img v-if="page.children.length > 0" 
+                class="show-more" 
+                :src="arrow"
+                v-bind:class="{ down: page.showChildren}"
+                v-on:click="page.showChildren = !page.showChildren"/>
+          </router-link>
 
           <router-link tag="div"
               v-if="page.showChildren"
               v-for="(subPage, index) in page.children"
-              :to="subPage.route" 
+              :to="{ path: '/'+page.route+'/'+subPage.route}" 
               class="menu-item sub-item"            
               v-bind:key="index"
               v-bind:class="{ active: currentRoute === subPage.route }">
             <div class="current-page-indicator"></div>
-            <div class="item-text">
-              <span v-on:click="$emit('toggle-menu')">{{ subPage.title }}</span>
+            <div class="item-text" v-on:click="$emit('toggle-menu')">
+              <span>{{ subPage.title }}</span>
             </div>
 
           </router-link>
@@ -42,7 +43,7 @@
     <div class="acknowledgement">
       <div id="madeBy">
         <p>
-          <a href="www.broggoli.ch">Web design by Nick Bachmann</a>
+          <a href="http://www.broggoli.ch">Web design by Nick Bachmann</a>
         </p>
       </div>
     </div>  
@@ -74,7 +75,7 @@ export default {
         let subPages = []
         
         for( const page of pages ) {
-          if( page.parent === 0) {
+          if( page.parent === 0 && page.menu_order > 0) {
             // This page is a main page
             mainPages.push(
               {
@@ -82,7 +83,7 @@ export default {
                 title: page.title.rendered, 
                 route: page.slug, 
                 order: page.menu_order,
-                showChildren: false,
+                showChildren: this.$router.currentRoute.path.indexOf(page.slug) > -1,
                 children: []
               })
           }else if( page.parent > 0){
