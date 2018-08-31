@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <page-component v-if="errors.length==0" v-bind:page="page" class="content"></page-component>
+    <page-component v-if="errors.length==0" :page=page :loading=loading class="content"></page-component>
     <alert-component v-if="errors.length > 0" v-bind:errors="errors"></alert-component>
   </div>
 </template>
@@ -19,13 +19,14 @@ export default {
     return {
       name: 'Home',
       msg: "TestMsg",
-      content: "loading...",
       errors: [],
-      page: {content: "no page loaded Yet", title: "No title"}
+      page: {content: "no page loaded Yet", title: "No title"},
+      loading: true
     }
   },
   watch: { 
       currentRoute: function(to) {
+        this.loading = true
         this.getPage(to)
       }
   },
@@ -40,12 +41,16 @@ export default {
         }else{
           this.content = "Nothing to see here!"
         }
+        this.loading = false
       })
       .catch(e => {
         if( e.msg ) {
           this.errors.push(e)
         }
       })
+    },
+    props: function() { 
+      return { loading: this.loading, page: this.page } 
     }
   },
   components: {

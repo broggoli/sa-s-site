@@ -1,2 +1,24 @@
-.page
+@import '../sass/_colors'
+
+@keyframes puls-color
+    0% 
+        background-color: lighten($text-color, 100%)
+    50% 
+        background-color: lighten($text-color, 70%)
+    100% 
+        background-color: lighten($text-color, 100%)
+
+
+.content
     margin: 1em
+    .loadingHeader
+        height: 1em
+        width: 10em
+        margin: 1em 0
+        animation: puls-color 2s infinite
+    .loadingContent
+        .loadingP
+            margin: 0.5em
+            height: 1em
+            //width: 200em
+            animation: puls-color 5s infinite

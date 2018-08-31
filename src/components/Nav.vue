@@ -1,5 +1,5 @@
 <template>
-  <nav class="nav backdrop-blur" v-bind:class="{ open: isOpen }">
+  <nav v-bind:class="{ open: isOpen }">
     <div class="nav-header">
       <img class="close-menu" :src="closeMenuImg" v-on:click="$emit('toggle-menu')"  />
     </div>
